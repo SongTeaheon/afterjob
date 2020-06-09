@@ -1,5 +1,6 @@
 package com.song.afterjob.controller;
 
+import com.song.afterjob.Utils.Constants;
 import com.song.afterjob.domain.PostsDvo;
 import com.song.afterjob.repository.PostsRepository;
 import com.song.afterjob.service.PostsServiceImpl;
@@ -33,10 +34,10 @@ class PostsControllerTest {
 
     @Test
     void getAllPosts() throws Exception{
-        postsRepository.save(new PostsDvo("title1", "abcd", "이종철"));
-        postsRepository.save(new PostsDvo("title2", "abcd", "이종철"));
-        postsRepository.save(new PostsDvo("title3", "abcd", "이종철"));
-        postsRepository.save(new PostsDvo("title4", "abcd", "이종철"));
+        postsRepository.save(new PostsDvo("title1", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
+        postsRepository.save(new PostsDvo("title2", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
+        postsRepository.save(new PostsDvo("title3", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
+        postsRepository.save(new PostsDvo("title4", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
 
         this.mockMvc.perform(MockMvcRequestBuilders.get("/posts/list")
                             .accept(MediaType.APPLICATION_JSON_VALUE))

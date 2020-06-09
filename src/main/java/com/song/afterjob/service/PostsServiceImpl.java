@@ -2,6 +2,7 @@ package com.song.afterjob.service;
 
 import com.song.afterjob.domain.PostsDvo;
 import com.song.afterjob.repository.PostsRepository;
+import com.song.afterjob.repository.PostsSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,12 @@ public class PostsServiceImpl implements PostsService {
 
     @Override
     public List<PostsDvo> findAll() {
-        List<PostsDvo> posts = new ArrayList<>();
-        postsRepository.findAll().forEach(e -> posts.add(e));
-        return posts;
+        return new ArrayList<>(postsRepository.findAll());
+    }
+
+    @Override
+    public List<PostsDvo> findAll(Long categoryNo) {
+        return new ArrayList<>(postsRepository.findAll(PostsSpec.categoryIs(categoryNo)));
     }
 
     @Override

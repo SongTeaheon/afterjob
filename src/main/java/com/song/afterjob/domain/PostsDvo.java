@@ -19,8 +19,8 @@ public class PostsDvo {
     private Long postNo;
     private String title;
 
-    @ColumnDefault("\'없음\'") //한글이 안됨...
-    private String category;
+    @ColumnDefault("0") //0
+    private Long categoryNo;
 
     private String cont;
     private String writer;
@@ -38,10 +38,11 @@ public class PostsDvo {
     private Long viewCnt;
 
     @Builder
-    public PostsDvo(String title, String cont, String writer){
+    public PostsDvo(String title, String cont, String writer, Long categoryNo){
         this.title = title;
         this.cont = cont;
         this.writer = writer;
+        this.categoryNo = categoryNo;
     }
 
 }

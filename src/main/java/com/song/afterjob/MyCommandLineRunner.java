@@ -1,5 +1,6 @@
 package com.song.afterjob;
 
+import com.song.afterjob.Utils.Constants;
 import com.song.afterjob.domain.PostsDvo;
 import com.song.afterjob.repository.PostsRepository;
 import org.slf4j.Logger;
@@ -17,11 +18,11 @@ public class MyCommandLineRunner implements CommandLineRunner {
     PostsRepository postsRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args){
         logger.info("command line runner run");
-        postsRepository.save(new PostsDvo("title1", "abcd", "이종철"));
-        postsRepository.save(new PostsDvo("title2", "abcd", "이종철"));
-        postsRepository.save(new PostsDvo("title3", "abcd", "이종철"));
-        postsRepository.save(new PostsDvo("title4", "abcd", "이종철"));
+        postsRepository.save(new PostsDvo("title1", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
+        postsRepository.save(new PostsDvo("title2", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
+        postsRepository.save(new PostsDvo("title3", "abcd", "이종철", Constants.CATEGORY_GROUP_ID));
+        postsRepository.save(new PostsDvo("title4", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
     }
 }

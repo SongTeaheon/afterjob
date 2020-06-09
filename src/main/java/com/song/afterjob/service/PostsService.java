@@ -6,9 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PostsService {
-    public List<PostsDvo> findAll();
-    public Optional<PostsDvo> findById(Long postNo);
-    public PostsDvo save(PostsDvo post);
-    public void deleteById(Long postNo);
-    public void updateById(Long postNo, PostsDvo post);
+    List<PostsDvo> findAll();
+    List<PostsDvo> findAll(Long CategoryNo);
+    Optional<PostsDvo> findById(Long postNo);
+    PostsDvo save(PostsDvo post);
+    void deleteById(Long postNo);
+    void updateById(Long postNo, PostsDvo post);
 }

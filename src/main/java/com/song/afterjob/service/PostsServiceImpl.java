@@ -4,6 +4,9 @@ import com.song.afterjob.domain.PostsDvo;
 import com.song.afterjob.repository.PostsRepository;
 import com.song.afterjob.repository.PostsSpec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -46,6 +49,10 @@ public class PostsServiceImpl implements PostsService {
         postsRepository.deleteById(postNo);
     }
 
+    public List<PostsDvo> findAllWithPaging(int pageNum, int pageSize){
+        Pageable pageRequest = PageRequest.of(pageNum, pageSize);
+        return postsRepository.findAll(pageRequest).toList();
+    }
 
     @Override
     public void updateById(Long postNo, PostsDvo post){

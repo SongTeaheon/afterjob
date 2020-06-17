@@ -25,6 +25,12 @@ public class PostsController {
         return new ResponseEntity<>(postsList, HttpStatus.OK);
     }
 
+    @GetMapping(value = "/pagingList",produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<List<PostsDvo>> getAllPostsWithPaging(@RequestParam int pageNum, @RequestParam int pageSize) {
+        List<PostsDvo> postsList = postsService.findAllWithPaging(pageNum-1, pageSize);
+        return new ResponseEntity<>(postsList, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/list/share",produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<List<PostsDvo>> getSharePosts() {
         List<PostsDvo> postsList = postsService.findAll(Constants.CATEGORY_SHARE_ID);
@@ -68,7 +74,7 @@ public class PostsController {
     @PutMapping("/{postNo}")
     public ResponseEntity<Object> updatePost(@RequestBody PostsDvo post, @PathVariable long postNo) {
         Optional<PostsDvo> postsOptional = postsService.findById(postNo);
-        if (!postsOptional.isPresent())
+        if (postsOptional.isEmpty())
             return ResponseEntity.notFound().build();
         post.setPostNo(postNo);
         postsService.save(post);

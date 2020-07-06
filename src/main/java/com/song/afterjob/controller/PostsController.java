@@ -4,6 +4,7 @@ import com.song.afterjob.Utils.Constants;
 import com.song.afterjob.domain.PostsDvo;
 import com.song.afterjob.service.PostsService;
 import com.song.afterjob.service.PostsServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,37 +16,27 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("posts")
+@Slf4j
 public class PostsController {
     @Autowired
     PostsService postsService;
 
-    @GetMapping(value = "/list",produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<PostsDvo>> getAllPosts() {
-        List<PostsDvo> postsList = postsService.findAll();
+    //카테고리별로 보기
+    @GetMapping(value = "list/{categoryNo}",produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<List<PostsDvo>> getPostsByCategory(@PathVariable long categoryNo) {
+        List<PostsDvo> postsList;
+
+        if(categoryNo == Constants.CATEGORY_ALL_ID){
+            postsList = postsService.findAll();
+        }else {
+            postsList = postsService.findAll(categoryNo);
+        }
         return new ResponseEntity<>(postsList, HttpStatus.OK);
     }
 
     @GetMapping(value = "/pagingList",produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<List<PostsDvo>> getAllPostsWithPaging(@RequestParam int pageNum, @RequestParam int pageSize) {
         List<PostsDvo> postsList = postsService.findAllWithPaging(pageNum-1, pageSize);
-        return new ResponseEntity<>(postsList, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/list/share",produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<PostsDvo>> getSharePosts() {
-        List<PostsDvo> postsList = postsService.findAll(Constants.CATEGORY_SHARE_ID);
-        return new ResponseEntity<>(postsList, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/list/group",produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<PostsDvo>> getGroupPosts() {
-        List<PostsDvo> postsList = postsService.findAll(Constants.CATEGORY_GROUP_ID);
-        return new ResponseEntity<>(postsList, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/list/qna",produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<PostsDvo>> getQnaPosts() {
-        List<PostsDvo> postsList = postsService.findAll(Constants.CATEGORY_QNA_ID);
         return new ResponseEntity<>(postsList, HttpStatus.OK);
     }
 
@@ -63,6 +54,7 @@ public class PostsController {
 
     @PostMapping(value = "/new", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<PostsDvo> createPost(@RequestBody PostsDvo newPosts) {
+        log.info(newPosts.toString());
         return new ResponseEntity<>(postsService.save(newPosts), HttpStatus.OK);
     }
 

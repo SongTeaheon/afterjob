@@ -54,6 +54,12 @@ public class UserEntity implements UserDetails {
         return Arrays.asList(authorities.split(","));
     }
 
+    public UserEntity(String userId, String password, String roles){
+        this.userId = userId;
+        this.password = password;
+        this.roles = roles;
+    }
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

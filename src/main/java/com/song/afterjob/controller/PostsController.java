@@ -51,6 +51,7 @@ public class PostsController {
 
     @PostMapping(value = "/new", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<PostsDvo> createPost(@RequestBody PostsDvo newPosts) {
+        log.info("createPost");
         log.info(newPosts.toString());
         return new ResponseEntity<>(postsService.save(newPosts), HttpStatus.OK);
     }

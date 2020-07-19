@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/posts/list/**").permitAll()
-                //.antMatchers("/posts/*").hasRole("USER")
+                .antMatchers("/posts/*").hasRole("USER") //읽기 쓰기 수정 삭제
                 .anyRequest().permitAll() //아직은 안만들었음!
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtManager), UsernamePasswordAuthenticationFilter.class);

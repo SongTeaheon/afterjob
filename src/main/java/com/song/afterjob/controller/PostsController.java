@@ -45,12 +45,9 @@ public class PostsController {
     public ResponseEntity<PostsDvo> getDetailPost(@PathVariable long postNo) {
 
         Optional<PostsDvo> postsDvoOp = postsService.findById(postNo);
-        if(postsDvoOp.isPresent()) {
-            return new ResponseEntity<>(postsDvoOp.get(), HttpStatus.OK );
-        }
-        return new ResponseEntity<>(new PostsDvo(), HttpStatus.OK);
+        return postsDvoOp.map((postsDvo) -> new ResponseEntity<>(postsDvo, HttpStatus.OK ))
+                .orElse(new ResponseEntity<>(new PostsDvo(), HttpStatus.NOT_FOUND ));
     }
-
 
     @PostMapping(value = "/new", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<PostsDvo> createPost(@RequestBody PostsDvo newPosts) {

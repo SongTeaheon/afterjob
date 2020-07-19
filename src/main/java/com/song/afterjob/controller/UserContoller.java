@@ -30,8 +30,10 @@ public class UserContoller {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+
         Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("result", "success");
+        resultMap.put("result", "join success");
+
         return ResponseEntity.ok().headers(responseHeaders).body(resultMap) ;
     }
 
@@ -44,9 +46,14 @@ public class UserContoller {
         }catch(Exception e) { //TODO:userId, pw다른 경우 exception 변경하
             return new ResponseEntity<>(userDto.getUserId(), HttpStatus.FORBIDDEN);
         }
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.add(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX + token);
+
         Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("token", token);
-        return new ResponseEntity<>(token, HttpStatus.OK) ;
+        resultMap.put("result", "login success");
+
+        return ResponseEntity.ok().headers(responseHeaders).body(resultMap);
     }
 
     @GetMapping("/test")

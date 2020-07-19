@@ -16,18 +16,18 @@ public class WebConfig implements WebMvcConfigurer {
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
-//
-//    @Override
-//    public void addCorsMappings(CorsRegistry registry) {
-//        registry.addMapping("/**")
-//                .allowedMethods(
-//                        HttpMethod.GET.name(),
-//                        HttpMethod.HEAD.name(),
-//                        HttpMethod.POST.name(),
-//                        HttpMethod.PUT.name(),
-//                        HttpMethod.DELETE.name())
-//                .allowedOrigins("http://localhost:3000");
-//    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedMethods(
+                        HttpMethod.GET.name(),
+                        HttpMethod.HEAD.name(),
+                        HttpMethod.POST.name(),
+                        HttpMethod.PUT.name(),
+                        HttpMethod.DELETE.name())
+                .allowedOrigins("http://localhost:3000");
+    }
 
     @Bean
     public ModelMapper modelMapper() {

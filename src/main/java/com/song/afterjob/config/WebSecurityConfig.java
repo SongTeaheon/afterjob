@@ -32,8 +32,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable() //jwt에서 csrf는 고려대상이 아님.
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//세션 유지x
                 .and()
+                .cors()
+                .and()
                 .authorizeRequests()
-                .antMatchers("/posts/list/**").hasRole("USER")
+                .antMatchers("/posts/list/**").permitAll()
+                //.antMatchers("/posts/*").hasRole("USER")
                 .anyRequest().permitAll() //아직은 안만들었음!
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtManager), UsernamePasswordAuthenticationFilter.class);

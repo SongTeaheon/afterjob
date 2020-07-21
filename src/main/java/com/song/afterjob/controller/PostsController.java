@@ -1,17 +1,22 @@
 package com.song.afterjob.controller;
 
 import com.song.afterjob.Utils.Constants;
+import com.song.afterjob.config.HeaderProperties;
+import com.song.afterjob.config.jwt.JwtProperties;
 import com.song.afterjob.domain.PostsDvo;
 import com.song.afterjob.service.PostsService;
 import com.song.afterjob.service.PostsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,10 +39,22 @@ public class PostsController {
         return new ResponseEntity<>(postsList, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/pagingList",produces = { MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<List<PostsDvo>> getAllPostsWithPaging(@RequestParam int pageNum, @RequestParam int pageSize) {
-        List<PostsDvo> postsList = postsService.findAllWithPaging(pageNum-1, pageSize);
-        return new ResponseEntity<>(postsList, HttpStatus.OK);
+    @GetMapping(value = "/pagingList/{categoryNo}",produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<List<PostsDvo>> getAllPostsWithPaging(@PathVariable long categoryNo,@RequestParam int pageNum, @RequestParam int pageSize) {
+        List<PostsDvo> postsList;
+        HttpHeaders responseHeaders = new HttpHeaders();
+
+        if(categoryNo == Constants.CATEGORY_ALL_ID){
+            postsList = postsService.findAllWithPaging(pageNum-1, pageSize);
+            responseHeaders.add(HeaderProperties.HEADER_STRING_TOTAL_CNT, Long.toString(postsService.count()));
+        }else {
+            postsList = postsService.findByCategoryWithPaging(categoryNo, pageNum-1, pageSize);
+            responseHeaders.add(HeaderProperties.HEADER_STRING_TOTAL_CNT, Long.toString(postsService.countByCategory(categoryNo)));
+        }
+        return ResponseEntity.ok()
+                .headers(responseHeaders)
+                .body(postsList);
+
     }
 
     //맞는지 확인피리요할 듯??

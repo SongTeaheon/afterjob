@@ -33,6 +33,15 @@ public class MyCommandLineRunner implements CommandLineRunner {
         postsRepository.save(new PostsDvo("title2", "abcd", "이종철", Constants.CATEGORY_SHARE_ID));
         postsRepository.save(new PostsDvo("title3", "abcd", "이종철", Constants.CATEGORY_GROUP_ID));
         postsRepository.save(new PostsDvo("title4", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title5", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title6", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title7", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title8", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title9", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title10", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+        postsRepository.save(new PostsDvo("title11", "abcd", "이종철", Constants.CATEGORY_QNA_ID));
+
+
         userRepository.save(new UserEntity("123", passwordEncoder.encode("123"), "ROLE_USER"));
     }
 }

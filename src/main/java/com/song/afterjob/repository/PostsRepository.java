@@ -15,4 +15,6 @@ public interface PostsRepository extends JpaRepository<PostsDvo, Long>, JpaSpeci
     //아무것도 안만들어도 crud생성
 
     Page<PostsDvo> findAll(Pageable pageable);
+    Page<PostsDvo> findByCategoryNo(long categoryNo, Pageable pageable);
+    Long countByCategoryNo(long categoryNo);
 }

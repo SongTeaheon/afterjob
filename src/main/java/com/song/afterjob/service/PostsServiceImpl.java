@@ -49,16 +49,25 @@ public class PostsServiceImpl implements PostsService {
         postsRepository.deleteById(postNo);
     }
 
+    @Override
     public List<PostsDvo> findAllWithPaging(int pageNum, int pageSize){
         Pageable pageRequest = PageRequest.of(pageNum, pageSize);
         return postsRepository.findAll(pageRequest).toList();
     }
 
     @Override
-    public void updateById(Long postNo, PostsDvo post){
-        //미완성
+    public List<PostsDvo> findByCategoryWithPaging(long categoryNo, int pageNum, int pageSize){
+        Pageable pageRequest = PageRequest.of(pageNum, pageSize);
+        return postsRepository.findByCategoryNo(categoryNo, pageRequest).toList();
     }
 
+    @Override
+    public long count() {
+        return postsRepository.count();
+    }
 
-
+    @Override
+    public long countByCategory(long categoryNo) {
+        return postsRepository.countByCategoryNo(categoryNo);
+    }
 }

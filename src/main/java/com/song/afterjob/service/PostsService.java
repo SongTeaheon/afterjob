@@ -14,7 +14,9 @@ public interface PostsService {
     Optional<PostsDvo> findById(Long postNo);
     PostsDvo save(PostsDvo post);
     void deleteById(Long postNo);
-    void updateById(Long postNo, PostsDvo post);
+    long count();
+    long countByCategory(long categoryNo);
 
     List<PostsDvo> findAllWithPaging(int pageNum, int pageSize);
-}
+    List<PostsDvo> findByCategoryWithPaging(long categoryNo, int pageNum, int pageSize)
+;}

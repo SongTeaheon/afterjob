@@ -39,9 +39,19 @@ public class JwtManager {
     }
 
     public boolean isValidToken(String token) {
+        if(token.isEmpty()){
+            return false;
+        }
         Jws<Claims> jws = Jwts.parser()
                 .setSigningKey(JwtProperties.SECRET_KEY)
                 .parseClaimsJws(token);
         return !jws.getBody().getExpiration().before(new Date());
+    }
+
+    public Date getExpiration(String token){
+        Jws<Claims> jws = Jwts.parser()
+                .setSigningKey(JwtProperties.SECRET_KEY)
+                .parseClaimsJws(token);
+        return jws.getBody().getExpiration();
     }
 }

@@ -56,9 +56,15 @@ public class UserContoller {
         return ResponseEntity.ok().headers(responseHeaders).body(resultMap);
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<?> testUserList(){
-        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    @GetMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("authorization") String token){
+        token = token.replace(JwtProperties.TOKEN_PREFIX, "");
+        userService.logout(token);
+
+        Map<String, String> resultMap = new HashMap<>();
+        resultMap.put("result", "logout success");
+
+        return ResponseEntity.ok().body(resultMap);
     }
 
 }

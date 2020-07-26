@@ -3,6 +3,7 @@ package com.song.afterjob.config.jwt;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final JwtManager jwtManager;
+    private final RedisTemplate<String, Boolean> redisTemplate;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -32,7 +34,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         if(token != null) {
             token = token.replace(JwtProperties.TOKEN_PREFIX, "");
 
-            if(jwtManager.isValidToken(token)){
+            if(redisTemplate.opsForValue().get(token) != null){
+                //로그아웃 블랙리스트 체크
+                log.error("로그아웃된 토큰입니다.");
+            }else if(jwtManager.isValidToken(token)){
                 Authentication auth = jwtManager.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }

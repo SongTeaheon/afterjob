@@ -11,4 +11,5 @@ public interface UserService {
     String login(UserDto userDto);
     String join(UserDto userDto);
     List<UserEntity> findAll();
+    void logout(String token);
 }

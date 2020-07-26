@@ -1,5 +1,6 @@
 package com.song.afterjob.service;
 
+import com.song.afterjob.config.jwt.JwtManager;
 import com.song.afterjob.config.jwt.JwtProvider;
 import com.song.afterjob.domain.UserEntity;
 import com.song.afterjob.repository.UserRepository;
@@ -7,12 +8,15 @@ import com.song.afterjob.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -23,6 +27,8 @@ public class UserServiceImpl implements UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final JwtManager jwtManager;
+    private final RedisTemplate<String, Boolean> redisTemplate;
 
     @Override
     public UserDto save(UserDto userDto) {
@@ -65,5 +71,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserEntity> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public void logout(String token) {
+        if(jwtManager.isValidToken(token)){
+            //black list에 추가
+            redisTemplate.opsForValue().set(token, true, jwtManager.getExpiration(token).getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
+        }
     }
 }

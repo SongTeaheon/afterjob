@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String login(UserDto userDto) {
-        UserEntity userEntity = userRepository.findByUserId(userDto.getUserId());
+        UserEntity userEntity = userRepository.findByEmail(userDto.getEmail());
         if(userEntity == null) {
             log.error("ID가 틀렸습니다.");
             throw new UsernameNotFoundException("ID가 틀렸습니다.");
@@ -53,12 +52,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public String join(UserDto userDto) {
 
-        if(userRepository.countByUserId(userDto.getUserId()) == 1) {
+        if(userRepository.countByEmail(userDto.getEmail()) == 1) {
             log.error("already exist in UserService");
             throw new IllegalArgumentException("이미 존재하는 ID입니다.");
         }
         UserEntity userEntitySave = UserEntity.builder()
-                .userId(userDto.getUserId())
+                .email(userDto.getEmail())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .roles("ROLE_USER")
                 .authorities("")
@@ -75,9 +74,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(String token) {
+        log.info(" logout start in userServiceImple");
         if(jwtManager.isValidToken(token)){
             //black list에 추가
+            log.info("logout and it is valid");
             redisTemplate.opsForValue().set(token, true, jwtManager.getExpiration(token).getTime() - new Date().getTime(), TimeUnit.MILLISECONDS);
         }
+        log.info("logout service is done");
     }
 }

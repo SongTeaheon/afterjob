@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 public class UserDto {
     private Long id;
-    private String userId;
+    private String email;
     private String password;
     private String roles;
     private String authorities;

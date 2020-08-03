@@ -9,8 +9,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -44,7 +42,7 @@ public class UserContoller {
         try {
             token = userService.login(userDto);
         }catch(Exception e) { //TODO:userId, pw다른 경우 exception 변경하
-            return new ResponseEntity<>(userDto.getUserId(), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(userDto.getEmail(), HttpStatus.FORBIDDEN);
         }
 
         HttpHeaders responseHeaders = new HttpHeaders();

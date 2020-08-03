@@ -35,11 +35,13 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
             token = token.replace(JwtProperties.TOKEN_PREFIX, "");
 
             if(redisTemplate.opsForValue().get(token) != null){
-                //로그아웃 블랙리스트 체크
+                //로그아웃 블랙리스트 체
                 log.error("로그아웃된 토큰입니다.");
             }else if(jwtManager.isValidToken(token)){
                 Authentication auth = jwtManager.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
+            }else{
+                log.info("유효하지 않은 토큰입니다.");
             }
         }
 

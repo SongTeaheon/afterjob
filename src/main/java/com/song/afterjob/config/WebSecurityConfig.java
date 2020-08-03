@@ -36,8 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/posts/list/**").permitAll()
+                .antMatchers("/posts/list/**", "/users/logout").permitAll()
                 .antMatchers("/posts/pagingList/**").permitAll()
+                .antMatchers("/users/kakao/**").permitAll()
                 .antMatchers("/posts/*").hasRole("USER") //읽기 쓰기 수정 삭제
                 .anyRequest().permitAll() //아직은 안만들었음!
                 .and()

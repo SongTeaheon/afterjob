@@ -28,7 +28,7 @@ public class UserEntity implements UserDetails {
 
     @Column
     @NotNull
-    private String userId;
+    private String email;
 
     @Column
     @NotNull
@@ -54,8 +54,8 @@ public class UserEntity implements UserDetails {
         return Arrays.asList(authorities.split(","));
     }
 
-    public UserEntity(String userId, String password, String roles){
-        this.userId = userId;
+    public UserEntity(String email, String password, String roles){
+        this.email = email;
         this.password = password;
         this.roles = roles;
     }
@@ -88,7 +88,7 @@ public class UserEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.userId;
+        return this.email;
     }
 
     @Override

@@ -16,10 +16,10 @@ public class UserPrincipalDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
-        UserEntity userEntity = userRepository.findByUserId(userId);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByEmail(email);
         if(userEntity == null) {
-            throw new UsernameNotFoundException(userId);
+            throw new UsernameNotFoundException(email);
         }
         return userEntity;
     }

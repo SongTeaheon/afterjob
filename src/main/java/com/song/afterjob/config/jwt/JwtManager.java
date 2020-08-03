@@ -1,6 +1,7 @@
 package com.song.afterjob.config.jwt;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -42,10 +43,16 @@ public class JwtManager {
         if(token.isEmpty()){
             return false;
         }
-        Jws<Claims> jws = Jwts.parser()
-                .setSigningKey(JwtProperties.SECRET_KEY)
-                .parseClaimsJws(token);
-        return !jws.getBody().getExpiration().before(new Date());
+        try {
+            Jws<Claims> jws = Jwts.parser()
+                    .setSigningKey(JwtProperties.SECRET_KEY)
+                    .parseClaimsJws(token);
+            return !jws.getBody().getExpiration().before(new Date());
+        }catch(ExpiredJwtException e){
+            log.error("expired!!");
+        }
+        return false;
+
     }
 
     public Date getExpiration(String token){

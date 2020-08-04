@@ -35,6 +35,18 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @Column
+    private String nickname;
+
+    @Column
+    private String profileImage;
+
+    @Column
+    private String thumbnailImage;
+
+    @Column
+    private String gender;
+
+    @Column
     private String roles;
 
     @Column

@@ -14,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Slf4j
@@ -36,12 +37,12 @@ public class KakaoApiImpl implements KakaoApi{
         }
 
         //2. 이 데이터로 kakao email 받기
-        String testStr = getKakaoInfo(tokenDto);
-        log.info(testStr);
+        KakaoInfoDto kakaoInfo = getKakaoInfo(tokenDto);
+        if(kakaoInfo == null) return false;
+
         //3. kakao email로 로그인 혹은 회원가입하기
         //4. email로 jwt만들기
         //5. jwt리턴
-
 
 
         return true;
@@ -73,7 +74,7 @@ public class KakaoApiImpl implements KakaoApi{
     }
 
     @Override
-    public String getKakaoInfo(KakaoTokenDto tokenDto) {
+    public KakaoInfoDto getKakaoInfo(KakaoTokenDto tokenDto) {
 
         String url = "https://kapi.kakao.com/v2/user/me";
         HttpHeaders headers = new HttpHeaders();
@@ -84,12 +85,27 @@ public class KakaoApiImpl implements KakaoApi{
                 .add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         HttpEntity<?> httpEntity = new HttpEntity<>(headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, String.class);
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, Map.class);
 
-        log.info(response.getHeaders().toString());
-        log.info(response.getBody());
+        //todo: 더 깔끔한 변환 찾기
+        LinkedHashMap<String, Object> kakaoAccountMap = (LinkedHashMap)response.getBody().get("kakao_account");
+        if(kakaoAccountMap == null) {
+            log.error("kakaoAccountMap is null");
+            return null;
+        }
+        LinkedHashMap<String, Object> kakaoPropertiesMap = (LinkedHashMap)response.getBody().get("properties");
+        if(kakaoPropertiesMap == null) {
+            log.error("kakaoPropertiesMap is null");
+            return null;
+        }
+        KakaoInfoDto kakaoInfo = KakaoInfoDto.builder()
+                                    .email((String)kakaoAccountMap.get("email"))
+                                    .gender((String)kakaoAccountMap.get("gender"))
+                                    .build();
+        kakaoInfo.setNickname((String)kakaoPropertiesMap.get("nickname"));
+        kakaoInfo.setProfileImage((String)kakaoPropertiesMap.get("profile_image"));
+        kakaoInfo.setThumbnailImage((String)kakaoPropertiesMap.get("thumbnail_image"));
 
-
-        return response.getBody();
+        return kakaoInfo;
     }
 }
